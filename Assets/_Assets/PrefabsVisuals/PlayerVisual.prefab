@@ -200,7 +200,7 @@ Transform:
   - {fileID: 3294758250785316825}
   - {fileID: 3294758251441920654}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &6024899996280613204
 Animator:
@@ -212,7 +212,7 @@ Animator:
   m_GameObject: {fileID: 3294758251327466535}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 109831050e4717746a643c3caee1b864, type: 2}
+  m_Controller: {fileID: 9100000, guid: cbcf07526321548eb8ba5e548e98e816, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -222,6 +222,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3294758251441920689
 GameObject:
   m_ObjectHideFlags: 0
