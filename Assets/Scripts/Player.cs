@@ -11,26 +11,10 @@ public class Player : MonoBehaviour {
     // 그렇다고 해서 private로 설정하면 에디터에서 옵션을 만질 수가 없음.
     // 이때 [SerializField] 를 사용하면 다른 클래스에서 사용할 수 없고 (코드 은닉) 에디터에서도 사용가능.
     [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private GameInput gameInput;
     private void Update() {
 
-        Vector2 inputVector = new Vector2(0, 0);
-
-        if (Input.GetKey(KeyCode.W)) {
-            inputVector.y += 1;
-        }
-        if (Input.GetKey(KeyCode.S)) {
-            inputVector.y -= 1;
-        }
-        if (Input.GetKey(KeyCode.A)) {
-            inputVector.x -= 1;
-        }
-        if (Input.GetKey(KeyCode.D)) {
-            inputVector.x += 1;
-        }
-
-        // Study: normalized.
-        inputVector = inputVector.normalized;
-
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
         
