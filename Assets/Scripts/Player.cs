@@ -20,7 +20,65 @@ public class Player : MonoBehaviour {
         
         // Study Why 델타타임을 곱하지? 
         // 동일한 속도를 보장하기 위해서
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
+
+        float moveDistance = Time.deltaTime * moveSpeed;
+
+        float playerRadius = .7f;
+        float playerHeight = 2f;
+
+        bool canMove = !Physics.CapsuleCast(
+            transform.position,
+            transform.position + Vector3.up * playerHeight,
+            playerRadius,
+            moveDir,
+            moveDistance
+        );
+
+        if (!canMove) {
+            // 움직일 수 없을 때
+            
+            // X 축으로만 누를 때
+
+            Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
+
+            canMove = !Physics.CapsuleCast(
+                transform.position,
+                transform.position + Vector3.up * playerHeight,
+                playerRadius,
+                moveDirX,
+                moveDistance
+            );
+
+            if (canMove) {
+                moveDir = moveDirX;
+            } else {
+                // x축으로 움직일 수 없음
+
+                // z축 으로 움직임 시도
+
+                Vector3 moveDirZ = new Vector3(0,0,moveDir.z).normalized;
+
+                canMove = !Physics.CapsuleCast(
+                    transform.position,
+                    transform.position + Vector3.up * playerHeight,
+                    playerRadius,
+                    moveDirZ,
+                    moveDistance
+                );
+
+                if (canMove) {
+                    moveDir = moveDirZ;
+                } else {
+                    // 어떤 방향으로도 이동 불가
+                }
+            }
+        }
+
+        if (canMove) {
+            transform.position += moveDir * moveDistance;
+        }
+
+
 
         isWalking = moveDir != Vector3.zero;
 
