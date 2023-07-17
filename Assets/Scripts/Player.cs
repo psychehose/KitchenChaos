@@ -7,13 +7,43 @@ public class Player : MonoBehaviour {
 
     private bool isWalking;
 
+    private Vector3 lastInteractDir;
+
     // Public 인 경우는 코드 은닉화를 달성할 수 없음
     // 그렇다고 해서 private로 설정하면 에디터에서 옵션을 만질 수가 없음.
     // 이때 [SerializField] 를 사용하면 다른 클래스에서 사용할 수 없고 (코드 은닉) 에디터에서도 사용가능.
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
-    private void Update() {
 
+    [SerializeField] private LayerMask counterLayerMask;
+    private void Update() {
+        HandleMovement();
+        HandleInteractions();
+    }
+
+    public bool IsWalking() {
+        return isWalking;
+    }
+
+    private void HandleInteractions() {
+        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+
+        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
+
+        if (moveDir != Vector3.zero) {
+            lastInteractDir = moveDir;
+        }
+
+        float interactDistance = 2f;
+        if (Physics.Raycast(transform.position, lastInteractDir, out RaycastHit raycastHit, interactDistance, counterLayerMask)) {
+            if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter)) {
+                clearCounter.Interact();
+            }
+        }
+
+    }
+
+    private void HandleMovement() {
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
 
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
@@ -85,9 +115,5 @@ public class Player : MonoBehaviour {
         float rotationSpeed = 10f;
         // 회전을 부드럽게 하는 lerp, slerp
         transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotationSpeed);
-    }
-
-    public bool IsWalking() {
-        return isWalking;
     }
 }
