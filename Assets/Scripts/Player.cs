@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour, IKitchenObjectParent {
 
 
     public static Player Instance { get; set; }
@@ -19,6 +19,8 @@ public class Player : MonoBehaviour {
 
     private ClearCounter selectedCounter;
 
+    private KitchenObject kitchenObject;
+
     // Public 인 경우는 코드 은닉화를 달성할 수 없음
     // 그렇다고 해서 private로 설정하면 에디터에서 옵션을 만질 수가 없음.
     // 이때 [SerializField] 를 사용하면 다른 클래스에서 사용할 수 없고 (코드 은닉) 에디터에서도 사용가능.
@@ -26,6 +28,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private GameInput gameInput;
 
     [SerializeField] private LayerMask counterLayerMask;
+
+    [SerializeField] private Transform kitchenObjectHoldPoint;
 
 
 
@@ -42,7 +46,7 @@ public class Player : MonoBehaviour {
 
     private void GameInput_OnInteractAction(object sender, System.EventArgs e) {
         if (selectedCounter != null) {
-            selectedCounter.Interact();
+            selectedCounter.Interact(this);
         }
     }
 
@@ -159,4 +163,30 @@ public class Player : MonoBehaviour {
             selectedCounter = selectedCounter
             });
     }
+
+
+    // Implement: IKitchenObjectParent
+
+
+    public Transform GetKitchenObjectFollowTransform() {
+        return kitchenObjectHoldPoint;
+    }
+
+    public KitchenObject GetKitchenObject() {
+        return kitchenObject;
+    }
+
+    public void SetKitchenObject(KitchenObject kitchenObject) {
+        this.kitchenObject = kitchenObject;
+    }
+
+    public void ClearKitchenObject() {
+        this.kitchenObject = null;
+    }
+
+    public bool hasKitchenObject() {
+        return kitchenObject != null;
+    }
+
+
 }
