@@ -8,9 +8,13 @@ public class ContainerCounter : BaseCounter {
     public event EventHandler OnPlayerGrabbedObject;
     [SerializeField] private KitchenObjectSO kitchenObjectSO;
     public override void Interact(Player player) {
-        Transform kitchenObjectTransform =  Instantiate(kitchenObjectSO.prefab);
-        kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+        if (!player.HasKitchenObject())
+        {
+            // Player가 아무것도 들고 있지 않을 때 interact 하기
+            Transform kitchenObjectTransform = Instantiate(kitchenObjectSO.prefab);
+            kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
 
-        OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+            OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
