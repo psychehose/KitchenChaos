@@ -5,9 +5,12 @@ using UnityEngine;
 public class BaseCounter : MonoBehaviour, IKitchenObjectParent {
     [SerializeField] private Transform counterTopPoint;
     protected KitchenObject kitchenObject;
-
-
-
+    
+    
+    public virtual void InteractAlternate(Player player) {
+        Debug.LogError("InteractAlternate.Interact();");
+    }
+    
     public virtual void Interact(Player player) {
         Debug.LogError("BaseCounter.Interact();");
     }
