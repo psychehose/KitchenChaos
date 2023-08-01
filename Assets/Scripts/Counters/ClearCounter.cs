@@ -21,13 +21,36 @@ public class ClearCounter : BaseCounter {
         }
         else
         {
+            // There is kitchen object here
             if (player.HasKitchenObject())
             {
-                // Player가 가지고 있으면 아무것도 해선 안됨
+                // Player is carrying something.
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                {
+                    // Player is holding plate -> Logic
+                    // Kitchen Object holded by ClearCounter
+                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO()))
+                    {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+                else
+                {
+                    // Player is not holding plate but something else
+                    if (GetKitchenObject().TryGetPlate(out plateKitchenObject))
+                    {
+                        // There is Plate in Clear Counter
+                        if (plateKitchenObject.TryAddIngredient(player.GetKitchenObject().GetKitchenObjectSO()))
+                        {
+                            player.GetKitchenObject().DestroySelf();
+                        }
+                        
+                    }
+                }
             }
             else
             {
-                // Player에 손에 들게 해야함
+                // Player is not carrying anything
                 GetKitchenObject().SetKitchenObjectParent(player);
             }
         }
